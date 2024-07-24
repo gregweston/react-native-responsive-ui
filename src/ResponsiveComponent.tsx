@@ -15,13 +15,16 @@ export default abstract class ResponsiveComponent extends Component<
   state = {
     window: Dimensions.get("window"),
   };
+  changeEventListener;
 
   componentDidMount() {
-    Dimensions.addEventListener("change", this.onDimensionChange);
+    this.changeEventListener = Dimensions.addEventListener("change", this.onDimensionChange);
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener("change", this.onDimensionChange);
+    if (this.changeEventListener) {
+      this.changeEventListener.remove();
+    }
   }
 
   onDimensionChange = (dims: ResponsiveComponentState) => this.setState(dims);
